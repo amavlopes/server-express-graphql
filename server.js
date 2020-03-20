@@ -1,8 +1,8 @@
-const express = require('express')
-const express_graphql = require('express-graphql')
-const { buildSchema } = require('graphql')
+const express = require('express');
+const express_graphql = require('express-graphql');
+const { buildSchema } = require('graphql');
 
-const app = express()
+const app = express();
 
 const data = [
     {
@@ -65,7 +65,7 @@ const data = [
         "reference": "r185e002 rc",
         "pshh": "180.0"
     }
-]
+];
 
 // Schema
 const schema = buildSchema(`
@@ -76,7 +76,7 @@ const schema = buildSchema(`
         riserSetNumber: String
         supplier: String
         section: String
-        function: String
+        func: String
         lifeLength: Float
         reference: String
         pshh: String
@@ -85,10 +85,13 @@ const schema = buildSchema(`
         getAll: [PipeLifetime]
         getAllByLimit(count: Int!): [PipeLifetime]
     }
-`)
+    type Mutation {
+        createPipeLifetime(platform: String, well: String, riserSetNumber: String, supplier: String, section: String, func: String, lifeLength: Float, reference: String, pshh: String): PipeLifetime
+    }
+`);
 
 // Resolver's functions
-const getAll = () => data
+const getAll = () => data;
 
 const getAllByLimit = args => {
     if ( args.count ) {
@@ -97,18 +100,39 @@ const getAllByLimit = args => {
     } else {
         return data;
     }
-}
+};
+
+const createPipeLifetime = args => {
+
+    let id = data.length; 
+    let PipeLifetime = {
+        id: ++id, 
+        platform: args.platform, 
+        well: args.well, 
+        riserSetNumber: args.riserSetNumber, 
+        supplier: args.supplier, 
+        section: args.section, 
+        func: args.func, 
+        lifeLength: args.lifeLength, 
+        reference: args.reference, 
+        pshh: args.pshh
+    }
+    data.push(PipeLifetime);
+    return PipeLifetime;
+
+};
 
 // Resolvers
 const root = {
     getAll: getAll,
     getAllByLimit: getAllByLimit,
-}
+    createPipeLifetime: createPipeLifetime
+};
 
 app.use('/graphql', express_graphql({
     schema: schema,
     rootValue: root,
     graphiql: true
-}))
+}));
 
-app.listen(4000, () => console.log('Express graphQL server running at http://localhost:4000/graphql.'))
+app.listen(4000, () => console.log('Express graphQL server running at http://localhost:4000/graphql.'));
