@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const express_graphql = require('express-graphql');
 const { buildSchema } = require('graphql');
 
@@ -12,7 +13,7 @@ const data = [
         "riserSetNumber": "c1433f03",
         "supplier": "bhge",
         "section": "riser bottom section",
-        "function": "po",
+        "func": "po",
         "lifeLength": 5.15,
         "reference": "r185e002 rc",
         "pshh": "180.0"
@@ -24,7 +25,7 @@ const data = [
         "riserSetNumber": "c1433f02",
         "supplier": "bhge",
         "section": "riser intermediate section",
-        "function": "po",
+        "func": "po",
         "lifeLength": 5.15,
         "reference": "r185e002 rc",
         "pshh": "180.0"
@@ -36,7 +37,7 @@ const data = [
         "riserSetNumber": "c1433f01",
         "supplier": "bhge",
         "section": "riser intermediate section",
-        "function": "po",
+        "func": "po",
         "lifeLength": 5.15,
         "reference": "r185e002 rc",
         "pshh": "180.0"
@@ -48,7 +49,7 @@ const data = [
         "riserSetNumber": "c1433h03",
         "supplier": "bhge",
         "section": "riser intermediate section",
-        "function": "po",
+        "func": "po",
         "lifeLength": 5.01,
         "reference": "r185e002 rc",
         "pshh": "180.0"
@@ -60,7 +61,7 @@ const data = [
         "riserSetNumber": "c1433e01",
         "supplier": "bhge",
         "section": "riser top section",
-        "function": "po",
+        "func": "po",
         "lifeLength": 5.84,
         "reference": "r185e002 rc",
         "pshh": "180.0"
@@ -129,6 +130,7 @@ const root = {
     createPipeLifetime: createPipeLifetime
 };
 
+app.use(cors());
 app.use('/graphql', express_graphql({
     schema: schema,
     rootValue: root,
